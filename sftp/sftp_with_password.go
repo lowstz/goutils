@@ -60,13 +60,13 @@ func ReadSFTPFile(path string, domain string, user string, password string) (*sf
 func SaveSFTPFilesToLocal(sftpPath string, localPath string, domain string, user string, password string) (bool, error) {
 	sftpFile, err := ReadSFTPFile(sftpPath, domain, user, password)
 	if err != nil {
-		return false, nil
+		return false, err
 	}
 	defer sftpFile.Close()
 
 	localFile, err := os.Create(localPath)
 	if err != nil {
-		return false, nil
+		return false, err
 	}
 
 	buf := make([]byte, 1024)

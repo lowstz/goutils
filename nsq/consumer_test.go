@@ -1,1 +1,6 @@
 package nsq
+
+
+cq := ConsumerQueue{
+    
+}

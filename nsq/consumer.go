@@ -4,6 +4,11 @@ import (
 	"github.com/bitly/go-nsq"
 )
 
+type ConsumerQueue struct {
+	Consumers       []*nsq.Consumer
+	NsqdLookupdAddr string
+}
+
 type Handler func(*nsq.Message)
 
 type Queue struct {
@@ -14,11 +19,6 @@ type Queue struct {
 func (q *Queue) HandleMessage(message *nsq.Message) error {
 	q.Callback(message)
 	return nil
-}
-
-type ConsumerQueue struct {
-	Consumers       []*nsq.Consumer
-	NsqlLookupdAddr string
 }
 
 func (c *ConsumerQueue) Register(topic string, channel string, handler Handler) {
@@ -36,7 +36,7 @@ func (c *ConsumerQueue) Register(topic string, channel string, handler Handler) 
 
 func (c *ConsumerQueue) Connect() {
 	for _, v := range c.Consumers {
-		v.ConnectToNSQLookupd(c.NsqlLookupdAddr)
+		v.ConnectToNSQLookupd(c.NsqdLookupdAddr)
 	}
 }
 

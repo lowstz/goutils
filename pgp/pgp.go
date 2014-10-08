@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 func ReadFromLocalFileToByte(path string) ([]byte, error) {
@@ -67,7 +68,7 @@ func PgpEncode(flatFilePath string, pgpFilePath string, publicKeyPath string) er
 	if err != nil {
 		return err
 	}
-	flatData, err := ac.ReadFromLocalFileToByte(flatFilePath)
+	flatData, err := ReadFromLocalFileToByte(flatFilePath)
 	if err != nil {
 		fmt.Println(2, err)
 		return err
@@ -86,29 +87,62 @@ func PgpEncode(flatFilePath string, pgpFilePath string, publicKeyPath string) er
 	if err != nil {
 		return err
 	}
-	err = ac.SaveToLocalFileWithByte(pgpFilePath, bytesp)
+	err = SaveToLocalFileWithByte(pgpFilePath, bytesp)
 	if err != nil {
 		return err
 	}
 	return nil
 
 }
+func PgpEncodeWithStringKey(flatFilePath string, pgpFilePath string, publicKey string) error {
 
-func PgpDecode(pgpFilePath string, flatFilePath string, privateKeyPath string) error {
-	privateKey, err := os.Open(privateKeyPath)
+	entitylist, err := openpgp.ReadArmoredKeyRing(strings.NewReader(publicKey))
+	//entitylist, err := openpgp.ReadKeyRing(publicKey)
+
 	if err != nil {
 		fmt.Println(1, err)
 		return err
 	}
-	defer privateKey.Close()
-	entitylist, err := openpgp.ReadArmoredKeyRing(privateKey)
+	buf := new(bytes.Buffer)
+	w, err := openpgp.Encrypt(buf, entitylist, nil, nil, nil)
+	if err != nil {
+		return err
+	}
+	flatData, err := ReadFromLocalFileToByte(flatFilePath)
+	if err != nil {
+		fmt.Println(2, err)
+		return err
+	}
+	_, err = w.Write(flatData)
+	if err != nil {
+		fmt.Println(3, err)
+		return err
+	}
+	err = w.Close()
+	if err != nil {
+		fmt.Println(4, err)
+		return err
+	}
+	bytesp, err := ioutil.ReadAll(buf)
+	if err != nil {
+		return err
+	}
+	err = SaveToLocalFileWithByte(pgpFilePath, bytesp)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+func PgpDecodeWithStringKey(pgpFilePath string, flatFilePath string, privateKey string) error {
+	entitylist, err := openpgp.ReadArmoredKeyRing(strings.NewReader(privateKey))
 
 	if err != nil {
 		fmt.Println(2, err)
 		return err
 	}
 
-	encryptedMessage, err := ac.ReadFromLocalFileToByte(pgpFilePath)
+	encryptedMessage, err := ReadFromLocalFileToByte(pgpFilePath)
 	if err != nil {
 		fmt.Println(3, err)
 		return err
@@ -135,6 +169,6 @@ func PgpDecode(pgpFilePath string, flatFilePath string, privateKeyPath string) e
 		fmt.Println(6, err)
 		return err
 	}
-	err = ac.SaveToLocalFileWithByte(flatFilePath, results)
+	err = SaveToLocalFileWithByte(flatFilePath, results)
 	return err
 }
