@@ -121,3 +121,20 @@ func LeaveSFTPAFile(path string, content string, domain string, user string, pas
 	defer f.Close()
 	return nil
 }
+func LeaveSFTPAFileWithByte(path string, content []byte, domain string, user string, password string) error {
+	client, err := GetSFTPClient(domain, user, password)
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+
+	f, err := client.Create(path)
+	if err != nil {
+		return err
+	}
+	if _, err := f.Write(content); err != nil {
+		return err
+	}
+	defer f.Close()
+	return nil
+}

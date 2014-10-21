@@ -28,8 +28,9 @@ func (c *ConsumerQueue) Register(topic string, channel string, handler Handler) 
 	q := &Queue{
 		handler, w,
 	}
-
-	w.AddConcurrentHandlers(q, 100)
+	w.AddHandler(q)
+	w.ChangeMaxInFlight(10)
+	//w.AddConcurrentHandlers(q, 100)
 
 	c.Consumers = append(c.Consumers, w)
 }

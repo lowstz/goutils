@@ -13,8 +13,16 @@ func GetMongodbSession(hosts string) (*mgo.Session, error) {
 		var err error
 		dbSession, err = mgo.Dial(hosts)
 		if err != nil {
-			fmt.Println(err)
-			panic(err)
+			return nil, err
+		}
+	}
+	// 判断session是否出现错误
+	if dbSession.Ping() != nil {
+		fmt.Println("链接失效，重新链接")
+		var err error
+		dbSession, err = mgo.Dial(hosts)
+		if err != nil {
+			return nil, err
 		}
 	}
 	return dbSession.Clone(), nil
