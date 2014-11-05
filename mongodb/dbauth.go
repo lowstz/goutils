@@ -24,6 +24,7 @@ func GetAuthMongodbSession(hosts string, user string, password string, db string
 		dial.Database = db
 		s, err = mgo.DialWithInfo(dial)
 		if err != nil {
+			panic(err)
 			return nil, err
 		}
 		dbAuthSession[db] = s
