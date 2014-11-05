@@ -1,24 +1,20 @@
 package mongodb
 
 import (
-	"fmt"
-	"labix.org/v2/mgo"
+	"gopkg.in/mgo.v2"
 )
 
 var dbSession *mgo.Session
 
 func GetMongodbSession(hosts string) (*mgo.Session, error) {
 	if dbSession == nil {
-		fmt.Println("初始化数据库链接")
 		var err error
 		dbSession, err = mgo.Dial(hosts)
 		if err != nil {
 			return nil, err
 		}
 	}
-	// 判断session是否出现错误
-	if dbSession.Ping() != nil {
-		fmt.Println("链接失效，重新链接")
+	if dbSession.Ping() == nil {
 		var err error
 		dbSession, err = mgo.Dial(hosts)
 		if err != nil {

@@ -2,7 +2,7 @@ package mongodb
 
 import (
 	"fmt"
-	"labix.org/v2/mgo"
+	"gopkg.in/mgo.v2"
 	"strings"
 )
 
