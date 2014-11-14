@@ -111,7 +111,7 @@ func GetRequest(url string) ([]byte, error) {
 	if err != nil {
 		return []byte(""), err
 	}
-	defer req.Body.Close()
+
 	client := &http.Client{}
 	res, err := client.Do(req)
 
