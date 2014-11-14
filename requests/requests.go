@@ -17,7 +17,6 @@ func PostRequest(url string, data []byte) ([]byte, error) {
 	if err != nil {
 		return []byte(""), err
 	}
-	defer req.Body.Close()
 
 	req.Header.Set("Content-Type", "application/json")
 
@@ -58,7 +57,6 @@ func PostFileRequest(url string, params map[string]string, data []byte, name str
 	if err != nil {
 		return []byte(""), err
 	}
-	defer req.Body.Close()
 
 	client := &http.Client{}
 	res, err := client.Do(req)
@@ -85,7 +83,6 @@ func PostHttpsRequest(url string, data []byte) ([]byte, error) {
 	if err != nil {
 		return []byte(""), err
 	}
-	defer req.Body.Close()
 
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
