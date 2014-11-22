@@ -25,12 +25,12 @@ func GenErrResponse(code int, msg string) *CommonHead {
 }
 
 func GenResponse(code int, msg string, data interface{}) *CommonJsonResponse {
-	result := &CommonJsonResponse{
-		CommonHead: CommonHead{
-			Code: code,
-			Msg:  msg,
-		},
-		Data: data,
+	ch := &CommonHead{
+		Code: code,
+		Msg:  msg,
 	}
+	result := new(CommonJsonResponse)
+	result.CommonHead = ch
+	result.Data = data
 	return result
 }
