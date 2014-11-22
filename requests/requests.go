@@ -102,6 +102,32 @@ func PostHttpsRequest(url string, data []byte) ([]byte, error) {
 	return result, err
 }
 
+func GetHttpsRequest(url string) ([]byte, error) {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return []byte(""), err
+	}
+
+	client := &http.Client{Transport: tr}
+	res, err := client.Do(req)
+
+	if err != nil {
+		fmt.Println(err)
+		return []byte(""), err
+	}
+
+	result, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		return []byte(""), err
+	}
+	return result, err
+}
+
 func GetRequest(url string) ([]byte, error) {
 
 	req, err := http.NewRequest("GET", url, nil)
