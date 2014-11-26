@@ -2,8 +2,8 @@ package sftp
 
 import (
 	"bufio"
-	"code.google.com/p/go.crypto/ssh"
 	"github.com/pkg/sftp"
+	"golang.org/x/crypto/ssh"
 	"io"
 	"os"
 )
