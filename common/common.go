@@ -25,7 +25,7 @@ func GenErrResponse(code int, msg string) *CommonHead {
 }
 
 func GenResponse(code int, msg string, data interface{}) *CommonJsonResponse {
-	ch := &CommonHead{
+	ch := CommonHead{
 		Code: code,
 		Msg:  msg,
 	}
