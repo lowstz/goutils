@@ -1,6 +1,0 @@
-package nsq
-
-
-cq := ConsumerQueue{
-    
-}
