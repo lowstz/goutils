@@ -22,16 +22,15 @@ func PostRequest(url string, data []byte) ([]byte, error) {
 
 	client := &http.Client{}
 	res, err := client.Do(req)
-
 	if err != nil {
 		return []byte(""), err
 	}
+	defer res.Body.Close()
 
 	result, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return []byte(""), err
 	}
-	defer res.Body.Close()
 
 	return result, err
 }
@@ -63,11 +62,12 @@ func PostFileRequest(url string, params map[string]string, data []byte, name str
 	if err != nil {
 		return []byte(""), err
 	}
+	defer res.Body.Close()
+
 	result, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return []byte(""), err
 	}
-	defer res.Body.Close()
 	return result, err
 }
 func PostHttpsRequest(url string, data []byte) ([]byte, error) {
@@ -88,16 +88,15 @@ func PostHttpsRequest(url string, data []byte) ([]byte, error) {
 	req.Header.Add("Content-Type", "application/json")
 
 	res, err := client.Do(req)
-
 	if err != nil {
 		return []byte(""), err
 	}
+	defer res.Body.Close()
 
 	result, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return []byte(""), err
 	}
-	defer res.Body.Close()
 
 	return result, err
 }
@@ -114,11 +113,11 @@ func GetHttpsRequest(url string) ([]byte, error) {
 
 	client := &http.Client{Transport: tr}
 	res, err := client.Do(req)
-
 	if err != nil {
 		fmt.Println(err)
 		return []byte(""), err
 	}
+	defer res.Body.Close()
 
 	result, err := ioutil.ReadAll(res.Body)
 
@@ -137,11 +136,11 @@ func GetRequest(url string) ([]byte, error) {
 
 	client := &http.Client{}
 	res, err := client.Do(req)
-
 	if err != nil {
 		fmt.Println(err)
 		return []byte(""), err
 	}
+	defer res.Body.Close()
 
 	result, err := ioutil.ReadAll(res.Body)
 
