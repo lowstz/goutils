@@ -1,7 +1,6 @@
 package mongodb
 
 import (
-	"fmt"
 	"gopkg.in/mgo.v2"
 	"strings"
 )
