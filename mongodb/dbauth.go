@@ -10,7 +10,19 @@ var dbAuthSession map[string]*mgo.Session
 func GetAuthMongodbSession(hosts string, user string, password string, db string) (*mgo.Session, error) {
 	if dbAuthSession == nil {
 		dbAuthSession = make(map[string]*mgo.Session)
-		goto GETSESSION
+		var err error
+		dial := new(mgo.DialInfo)
+		dial.Addrs = strings.Split(hosts, ",")
+		dial.Username = user
+		dial.Password = password
+		dial.Database = db
+		ss, err := mgo.DialWithInfo(dial)
+		if err != nil {
+			panic(err)
+			return nil, err
+		}
+		dbAuthSession[db] = ss
+		return ss.Clone(), nil
 	}
 	s := dbAuthSession[db]
 	if s == nil {
