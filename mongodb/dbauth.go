@@ -28,12 +28,12 @@ GETSESSION:
 	dial.Username = user
 	dial.Password = password
 	dial.Database = db
-	s, err = mgo.DialWithInfo(dial)
+	ss, err := mgo.DialWithInfo(dial)
 	if err != nil {
 		panic(err)
 		return nil, err
 	}
-	dbAuthSession[db] = s
+	dbAuthSession[db] = ss
 	return s.Clone(), nil
 
 }
