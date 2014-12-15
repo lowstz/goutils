@@ -34,7 +34,7 @@ GETSESSION:
 		return nil, err
 	}
 	dbAuthSession[db] = ss
-	return s.Clone(), nil
+	return ss.Clone(), nil
 
 }
 
