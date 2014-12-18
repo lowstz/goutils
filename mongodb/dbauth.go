@@ -18,7 +18,6 @@ func GetAuthMongodbSession(hosts string, user string, password string, db string
 		dial.Database = db
 		ss, err := mgo.DialWithInfo(dial)
 		if err != nil {
-			panic(err)
 			return nil, err
 		}
 		dbAuthSession[db] = ss
@@ -28,7 +27,8 @@ func GetAuthMongodbSession(hosts string, user string, password string, db string
 	if s == nil {
 		goto GETSESSION
 	} else {
-		if s.Ping() != nil {
+		// 如果错误为空
+		if s.Ping() == nil {
 			return s.Clone(), nil
 		}
 		goto GETSESSION
@@ -42,7 +42,6 @@ GETSESSION:
 	dial.Database = db
 	ss, err := mgo.DialWithInfo(dial)
 	if err != nil {
-		panic(err)
 		return nil, err
 	}
 	dbAuthSession[db] = ss
