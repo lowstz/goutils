@@ -14,7 +14,7 @@ func GetMongodbSession(hosts string) (*mgo.Session, error) {
 			return nil, err
 		}
 	}
-	if dbSession.Ping() == nil {
+	if dbSession.Ping() != nil {
 		var err error
 		dbSession, err = mgo.Dial(hosts)
 		if err != nil {
